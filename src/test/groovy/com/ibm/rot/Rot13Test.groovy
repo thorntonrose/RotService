@@ -27,9 +27,4 @@ class Rot13Test {
 			System.out = currOut
 		}
 	}
-
-	@Test
-	void testSomething() {
-		println "testSomething"
-	}
 }

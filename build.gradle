@@ -7,10 +7,22 @@ repositories {
 }
 
 dependencies {
+   compile "javax:javaee-api:7.0"
 	compile "org.codehaus.groovy:groovy-all:2.4.7"
+	compile "io.swagger:swagger-jersey2-jaxrs:1.5.8"
 	compile "io.undertow:undertow-core:1.3.22.Final"
+	compile "io.undertow:undertow-servlet:1.3.22.Final"
 
 	testCompile "junit:junit:4.12"
+}
+
+sourceSets {
+	featureTest {
+      groovy {
+         compileClasspath = main.output + configurations.testCompile
+         runtimeClasspath += compileClasspath
+      }		
+	}
 }
 
 jar {
@@ -25,9 +37,17 @@ jar {
 	from { configurations.compile.collect { zipTree(it) } }
 }
 
-test {
-   onOutput { desc, event -> print event.message }
-   beforeSuite { if (it.className) { println "Running ${it.name}" } }
+task featureTest(type: Test) {
+   classpath = sourceSets.featureTest.runtimeClasspath
+   testClassesDir = sourceSets.featureTest.output.classesDir
+   outputs.dir reports.junitXml.destination
+   outputs.dir reports.html.destination
+}
+
+tasks.withType(Test) {
+	dependsOn "clean${name.capitalize()}"
+	onOutput { desc, event -> print event.message }
+	beforeSuite { if (it.className) { println "Running ${it.name}" } }
    beforeTest { println it.name }
 
 	afterSuite { desc, result ->

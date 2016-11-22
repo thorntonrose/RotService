@@ -1,8 +1,11 @@
 package com.ibm.rot
 
 import io.undertow.*
+import io.undertow.servlet.*
 import io.undertow.server.*
 import io.undertow.util.*
+import javax.ws.rs.core.*
+import org.glassfish.jersey.servlet.*
 
 class Main {
 	static final rot13 = new Rot13()
@@ -10,18 +13,29 @@ class Main {
 
 	static void main(String[] args) {
 		start()
-	}	
+	}
 
 	static void start() {
-		def requestHandler = new HttpHandler() {
-			@Override
-			public void handleRequest(final HttpServerExchange exchange) throws Exception {
-				exchange.responseHeaders.put Headers.CONTENT_TYPE, "text/plain"
-				exchange.responseSender.send rot13.rot(exchange.queryString)
-			}
-		}
+		def deployment = Servlets
+			.deployment()
+			.setClassLoader(Application.class.classLoader)
+			.setDeploymentName(".")
+			.setContextPath("")
+			.addServlets(
+				Servlets.servlet("jersey", ServletContainer.class)
+					.setLoadOnStartup(1)
+					.addMapping("/*")
+					.addInitParam(ServletProperties.JAXRS_APPLICATION_CLASS, Application.class.name)
+			)
 
-		server = Undertow.builder().setHandler(requestHandler).addHttpListener(8080, "0.0.0.0").build()
+		def deploymentManager = Servlets.defaultContainer().addDeployment(deployment)
+		deploymentManager.deploy()
+
+		server = Undertow
+			.builder()
+			.addHttpListener(8080, "0.0.0.0")
+			.setHandler(deploymentManager.start())
+			.build()
 		server.start()
 	}
 

@@ -37,6 +37,14 @@ jar {
 	from { configurations.compile.collect { zipTree(it) } }
 }
 
+task dist(type: Copy) {
+	dependsOn assemble
+	outputs.dir "$distsDir/main"
+	from "src/main/resources"
+	from "build/libs"
+	into "$distsDir/main"
+}
+
 task featureTest(type: Test) {
    classpath = sourceSets.featureTest.runtimeClasspath
    testClassesDir = sourceSets.featureTest.output.classesDir

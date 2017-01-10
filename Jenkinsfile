@@ -9,5 +9,6 @@ node {
 
 	stage("test") {
 		sh "./gradlew test"
+		junit "build/test-results/tests/TEST-*.xml"
 	}
 }

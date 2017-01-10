@@ -54,6 +54,7 @@ task featureTest(type: Test) {
 
 tasks.withType(Test) {
 	dependsOn "clean${name.capitalize()}"
+   ignoreFailures = true
 	onOutput { desc, event -> print event.message }
 	beforeSuite { if (it.className) { println "Running ${it.name}" } }
    beforeTest { println it.name }

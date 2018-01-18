@@ -2,6 +2,8 @@ plugins {
 	id "groovy"
 }
 
+version "1.0.0"
+
 repositories {
 	mavenCentral()
 }
@@ -22,7 +24,7 @@ sourceSets {
       groovy {
          compileClasspath = main.output + configurations.testCompile
          runtimeClasspath += compileClasspath
-      }		
+      }
 	}
 }
 

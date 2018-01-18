@@ -2,6 +2,7 @@ node {
 	def props
 
 	stage("checkout") {
+		deleteDir()
 		checkout scm
 	}
 

@@ -33,7 +33,7 @@ class Main {
 
 		server = Undertow
 			.builder()
-			.addHttpListener(8180, "0.0.0.0")
+			.addHttpListener(8080, "0.0.0.0")
 			.setHandler(deploymentManager.start())
 			.build()
 		server.start()

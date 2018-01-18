@@ -5,7 +5,7 @@ import static groovy.test.GroovyAssert.*
 
 /**
  * Rot13 tests.
- * 
+ *
  * @author thorntonrose
  */
 class Rot13Test {
@@ -13,7 +13,7 @@ class Rot13Test {
 	void testRot() {
 		assertEquals "rot:", "nop", new Rot13().rot("abc")
 	}
-	
+
 	@Test
 	void testMain_Usage() {
 		def currOut = System.out

@@ -17,7 +17,7 @@ node {
 
 	stage("publish") {
 		def branch = sh(script: "git branch | cut -f2 -d' '", returnStdout: true).trim()
-		def commitId = bash("git rev-parse HEAD", true).trim()[0..9]
+		def commitId = sh("git rev-parse HEAD", returnStdout: true).trim()[0..9]
 		def timestamp = new Date().format('yyyyMMddHHmmss')
 		def tag = "${props.version}-$timestamp-$commitId"
 		writeFile file: "build/$tag", text: tag

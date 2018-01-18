@@ -19,7 +19,7 @@ node {
 		def branch = sh(script: "git branch | cut -f2 -d' '", returnStdout: true).trim()
 		def commitId = sh(script: "git rev-parse HEAD", returnStdout: true).trim()[0..9]
 		def timestamp = new Date().format('yyyyMMddHHmmss')
-		def tag = "${props.version}-$timestamp-$commitId"
+		def tag = (branch.startsWith("release") ? "release-" : "") + "${props.version}-$timestamp-$commitId"
 		writeFile file: "build/$tag", text: tag
 
 		sh "git tag -am \"publish ${props.version}\" ${tag}"

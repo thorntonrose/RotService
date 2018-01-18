@@ -20,8 +20,11 @@ node {
 		def commitId = bash("git rev-parse HEAD", true).trim()[0..9]
 		def timestamp = new Date().format('yyyyMMddHHmmss')
 		def tag = "${props.version}-$timestamp-$commitId"
+		writeFile file: "build/$tag", text: tag
 
 		sh "git tag -am \"publish ${props.version}\" ${tag}"
 		sshagent([ 'roseth' ]) { sh "git push origin ${branch} --tags" }
+
+		archiveArtifacts "build/${props.version}-*"
 	}
 }

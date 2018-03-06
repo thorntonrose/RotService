@@ -16,20 +16,19 @@ class Main {
 	}
 
 	static void start() {
-		def deploymentManager = Servlets.defaultContainer().addDeployment(
-			Servlets
-				.deployment()
-				.setClassLoader(Application.class.classLoader)
-				.setDeploymentName(".")
-				.setContextPath("")
-				.addServlets(
-					Servlets.servlet("jersey", ServletContainer.class)
-						.setLoadOnStartup(1)
-						.addMapping("/*")
-						.addInitParam(ServletProperties.JAXRS_APPLICATION_CLASS, Application.class.name)
-				)
-		)
+		def deployment = Servlets
+			.deployment()
+			.setClassLoader(Application.class.classLoader)
+			.setDeploymentName(".")
+			.setContextPath("")
+			.addServlets(
+				Servlets.servlet("jersey", ServletContainer.class)
+					.setLoadOnStartup(1)
+					.addMapping("/*")
+					.addInitParam(ServletProperties.JAXRS_APPLICATION_CLASS, Application.class.name)
+			)
 
+		def deploymentManager = Servlets.defaultContainer().addDeployment(deployment)
 		deploymentManager.deploy()
 
 		server = Undertow
@@ -37,7 +36,6 @@ class Main {
 			.addHttpListener(8080, "0.0.0.0")
 			.setHandler(deploymentManager.start())
 			.build()
-
 		server.start()
 	}
 

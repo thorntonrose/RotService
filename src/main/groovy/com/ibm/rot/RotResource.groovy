@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response
 
 /**
  * ROT13 resource.
- * 
+ *
  * @author thorntonrose
  */
 @Path("")
@@ -18,7 +18,7 @@ class RotResource {
 	@GET
 	@Path("rot13")
 	Response rot13(@QueryParam("text") String text) {
-		def config = new URL("http://localhost:9090/rot13").text
+		//def config = new URL("http://localhost:9090/rot13").text
 		// ...
 		String rottedText = rot13.rot(text)
 		return Response.status(200).entity(rottedText).build()
@@ -28,6 +28,6 @@ class RotResource {
 	@Path("rot13")
 	Response rot13Post(String text) {
 		String rottedText = rot13.rot(text)
-		return Response.status(200).entity(rottedText).build()		
+		return Response.status(200).entity(rottedText).build()
 	}
 }
